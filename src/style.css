@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Nunito', sans-serif;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+    background: radial-gradient(circle at 15% 15%, #FFF0F5 0%, #F5ECFC 40%, #EAFBF5 75%, #FFFCE8 100%);
+    background-attachment: fixed;
+  }
+}
+
+/* Pastel Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FFF0F5;
+}
+::-webkit-scrollbar-thumb {
+  background: #FFB5C5;
+  border-radius: 9999px;
+}
+
+/* Candle Flames & Extinguish State */
+.flame {
+  transform-origin: center bottom;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.flame.blown-out {
+  opacity: 0 !important;
+  transform: scale(0.2) translateY(-20px) !important;
+  pointer-events: none;
+}
+
+/* Smoke Puff Effect */
+.smoke-puff {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  background: rgba(160, 160, 180, 0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999;
+  animation: smokeRise 1.2s ease-out forwards;
+}
+@keyframes smokeRise {
+  0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.8; }
+  100% { transform: translate(-50%, -70px) scale(3.5); opacity: 0; filter: blur(4px); }
+}
+
+/* Sparkle Trail */
+.sparkle-trail {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  animation: sparkleFade 0.75s ease-out forwards;
+  font-size: 14px;
+}
+@keyframes sparkleFade {
+  0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-50%, -80%) scale(0.2) rotate(45deg); opacity: 0; }
+}
+
+/* 3D Envelope Animation */
+.envelope-card {
+  perspective: 1200px;
+}
+.envelope-wrapper {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.envelope-flap {
+  transform-origin: top center;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 30;
+}
+.envelope-open .envelope-flap {
+  transform: rotateX(180deg);
+  z-index: 5;
+}
+/* When closed: letter is completely hidden inside */
+.envelope-closed .letter-sheet {
+  opacity: 0;
+  max-height: 0;
+  transform: translateY(30px) scale(0.92);
+  pointer-events: none;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+/* When open: letter smoothly glides out */
+.envelope-open .letter-sheet {
+  opacity: 1;
+  max-height: 800px;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  transition: all 0.65s cubic-bezier(0.34, 1.25, 0.64, 1);
+}
+/* Sealed front face toggle */
+.envelope-closed .envelope-sealed-view {
+  display: flex;
+}
+.envelope-open .envelope-sealed-view {
+  display: none;
+}
+
+/* Floating Musical Notes */
+@keyframes floatNote {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translate(var(--tw-note-x, 25px), -80px) scale(1.4) rotate(25deg); opacity: 0; }
+}
+.music-note-float {
+  position: absolute;
+  animation: floatNote 2s ease-out forwards;
+  pointer-events: none;
+  z-index: 40;
+}
+
+/* Background Floating Symbols */
+@keyframes driftUp {
+  0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+  15% { opacity: 0.6; }
+  85% { opacity: 0.6; }
+  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+.floating-bg-item {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  animation: driftUp linear infinite;
+}

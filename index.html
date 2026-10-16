@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday ! ✨ Pastel Wonderland</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Fredoka, Pacifico & Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Pacifico&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            fredoka: ['Fredoka', 'sans-serif'],
+            pacifico: ['Pacifico', 'cursive'],
+            nunito: ['Nunito', 'sans-serif'],
+          },
+          colors: {
+            pastelPink: '#FFD6E0',
+            pastelPeach: '#FFE4D6',
+            pastelLilac: '#E8DFF5',
+            pastelMint: '#C9E4DE',
+            pastelYellow: '#FCF5C7',
+            candyPink: '#FF6B8B',
+            candyRose: '#FA5282',
+            candyPurple: '#9B5DE5',
+            softViolet: '#7E69AB',
+            butterYellow: '#FFF1C5'
+          },
+          keyframes: {
+            floatSlow: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-12px) rotate(2deg)' },
+            },
+            flicker: {
+              '0%': { transform: 'scale(1) skewX(-2deg)', opacity: '0.92' },
+              '100%': { transform: 'scale(1.18) skewX(2.5deg)', opacity: '1' },
+            },
+            wiggle: {
+              '0%, 100%': { transform: 'rotate(-4deg)' },
+              '50%': { transform: 'rotate(4deg)' },
+            },
+            cassetteSpin: {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' },
+            }
+          },
+          animation: {
+            'float-slow': 'floatSlow 4s ease-in-out infinite',
+            'flicker': 'flicker 0.18s ease-in-out infinite alternate',
+            'wiggle': 'wiggle 1.2s ease-in-out infinite',
+            'cassette-spin': 'cassetteSpin 2.5s linear infinite',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+      background: radial-gradient(circle at 15% 15%, #FFF0F5 0%, #F5ECFC 40%, #EAFBF5 75%, #FFFCE8 100%);
+      background-attachment: fixed;
+    }
+
+    /* Pastel Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #FFF0F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #FFB5C5;
+      border-radius: 9999px;
+    }
+
+    /* Candle Flames & Extinguish State */
+    .flame {
+      transform-origin: center bottom;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .flame.blown-out {
+      opacity: 0 !important;
+      transform: scale(0.2) translateY(-20px) !important;
+      pointer-events: none;
+    }
+
+    /* Smoke Puff Effect */
+    .smoke-puff {
+      position: fixed;
+      width: 14px;
+      height: 14px;
+      background: rgba(160, 160, 180, 0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 999;
+      animation: smokeRise 1.2s ease-out forwards;
+    }
+
+    @keyframes smokeRise {
+      0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: translate(-50%, -70px) scale(3.5);
+        opacity: 0;
+        filter: blur(4px);
+      }
+    }
+
+    /* Sparkle Trail */
+    .sparkle-trail {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      animation: sparkleFade 0.75s ease-out forwards;
+      font-size: 14px;
+    }
+
+    @keyframes sparkleFade {
+      0% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(-50%, -80%) scale(0.2) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    /* 3D Envelope Animation */
+    .envelope-card {
+      perspective: 1200px;
+    }
+
+    .envelope-wrapper {
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .envelope-flap {
+      transform-origin: top center;
+      transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 30;
+    }
+
+    .envelope-open .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 5;
+    }
+
+    /* When closed: letter is completely hidden inside */
+    .envelope-closed .letter-sheet {
+      opacity: 0;
+      max-height: 0;
+      transform: translateY(30px) scale(0.92);
+      pointer-events: none;
+      overflow: hidden;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+    }
+
+    /* When open: letter smoothly glides out */
+    .envelope-open .letter-sheet {
+      opacity: 1;
+      max-height: 800px;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+      transition: all 0.65s cubic-bezier(0.34, 1.25, 0.64, 1);
+    }
+
+    /* Sealed front face toggle */
+    .envelope-closed .envelope-sealed-view {
+      display: flex;
+    }
+
+    .envelope-open .envelope-sealed-view {
+      display: none;
+    }
+
+    /* Floating Musical Notes */
+    @keyframes floatNote {
+      0% {
+        transform: translate(0, 0) scale(0.6);
+        opacity: 0;
+      }
+
+      30% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(var(--tw-note-x, 25px), -80px) scale(1.4) rotate(25deg);
+        opacity: 0;
+      }
+    }
+
+    .music-note-float {
+      position: absolute;
+      animation: floatNote 2s ease-out forwards;
+      pointer-events: none;
+      z-index: 40;
+    }
+
+    /* Background Floating Symbols */
+    @keyframes driftUp {
+      0% {
+        transform: translateY(105vh) rotate(0deg);
+        opacity: 0;
+      }
+
+      15% {
+        opacity: 0.6;
+      }
+
+      85% {
+        opacity: 0.6;
+      }
+
+      100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .floating-bg-item {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      animation: driftUp linear infinite;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-gray-700 relative pb-28 selection:bg-candyPink selection:text-white">
+
+  <!-- Ambient Floating Background Icons -->
+  <div id="ambient-bg" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+  <!-- FLOATING STICKY HEADER -->
+  <header class="sticky top-4 z-50 max-w-4xl mx-auto px-4">
+    <div
+      class="backdrop-blur-md bg-white/85 border-2 border-pink-200 shadow-xl shadow-pink-100/60 rounded-full px-4 sm:px-6 py-2.5 flex items-center justify-between gap-2">
+      <!-- Title Badge -->
+      <div class="flex items-center space-x-2.5">
+        <div
+          class="w-9 h-9 rounded-full bg-pastelPink flex items-center justify-center text-lg shadow-inner animate-wiggle">
+          🎀
+        </div>
+        <div>
+          <span class="font-pacifico text-lg sm:text-xl text-candyPink tracking-wide block leading-tight">
+            Happy Birthday Cheata
+          </span>
+          <span
+            class="hidden sm:inline-block text-[11px] font-fredoka font-semibold text-softViolet bg-pastelLilac/70 px-2 py-0.5 rounded-full">
+            My Sweet Heart Cheata ♫
+          </span>
+        </div>
+      </div>
+
+      <!-- Quick Action Controls -->
+      <div class="flex items-center gap-2">
+        <button id="topConfettiBtn" title="Blast Confetti!"
+          class="flex items-center gap-1.5 bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white font-fredoka text-xs sm:text-sm px-3.5 py-2 rounded-full shadow-md active:scale-95 transition-all">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Confetti</span>
+        </button>
+
+        <button id="quickMusicBtn"
+          class="flex items-center gap-1.5 bg-pastelYellow hover:bg-yellow-200 text-amber-900 border border-amber-300 font-fredoka text-xs sm:text-sm px-3.5 py-2 rounded-full shadow-sm active:scale-95 transition-all">
+          <i id="quickMusicIcon" data-lucide="music" class="w-4 h-4 text-candyRose"></i>
+          <span id="quickMusicText">Play Song</span>
+          <span id="quickMusicPing" class="hidden w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="relative z-10 max-w-4xl mx-auto px-4 pt-6 space-y-12">
+
+    <!-- HERO SECTION WITH DYNAMIC NAME INPUT -->
+    <section class="text-center pt-2">
+      <div
+        class="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-white/90 border border-pink-200 shadow-sm text-candyRose font-fredoka text-xs sm:text-sm mb-4 animate-bounce">
+        <span>✨ The Most Wonderful Celebration Ever ✨</span>
+      </div>
+
+      <h1 class="font-fredoka text-4xl sm:text-6xl md:text-7xl font-bold text-gray-800 tracking-tight leading-tight">
+        Happy Birthday <br class="sm:hidden" />
+        <!-- <span id="heroRecipientName"
+          class="relative inline-block bg-gradient-to-r from-candyPink via-purple-500 to-candyRose bg-clip-text text-transparent underline decoration-wavy decoration-pastelPink decoration-2 sm:decoration-4">
+          Sweet
+        </span> -->
+        <span class="inline-block animate-wiggle">🎂</span>
+      </h1>
+
+      <p class="font-nunito text-base sm:text-xl text-gray-600 max-w-xl mx-auto mt-3 font-medium">
+        Wishing you endless smiles, sugary treats, huge warm hugs, and all the magical blessings in the world! 🌸
+      </p>
+
+
+    </section>
+
+    <!-- SECTION 1: POLAROID PHOTO UPLOAD & CASSETTE MUSIC BOX -->
+    <section
+      class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white/80 backdrop-blur-sm border-2 border-pink-200 rounded-3xl p-6 sm:p-8 shadow-xl shadow-pink-100/60">
+
+      <!-- PHOTO FRAME POLAROID (FILEREADER + LOCALSTORAGE) -->
+      <div class="flex flex-col items-center">
+        <div
+          class="relative bg-white p-4 pb-7 rounded-3xl shadow-xl shadow-pink-200/50 border-4 border-pink-100 rotate-[-2deg] hover:rotate-0 transition-transform duration-300 w-72 sm:w-80 group">
+
+          <!-- Decorative Tape Top -->
+          <div
+            class="absolute -top-3.5 left-1/2 -translate-x-1/2 w-28 h-7 bg-pink-200/70 backdrop-blur-sm -rotate-2 border border-pink-300/40 rounded-sm z-20">
+          </div>
+
+          <!-- Image Container -->
+          <div
+            class="relative w-full aspect-square rounded-2xl overflow-hidden bg-pink-50 border-2 border-dashed border-pink-200 flex items-center justify-center">
+
+            <img id="birthdayPhoto"
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"
+              alt="Birthday Star" class="w-full h-full object-cover rounded-2xl transition-all duration-300" />
+
+            <!-- Hover Upload Overlay -->
+            <label for="photoUploadInput"
+              class="absolute inset-0 bg-pink-900/40 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-200 backdrop-blur-[2px]">
+              <i data-lucide="camera" class="w-7 h-7 mb-1"></i>
+              <span class="text-xs font-fredoka font-bold">Change Photo</span>
+            </label>
+          </div>
+
+          <!-- Hidden File Input -->
+          <input type="file" id="photoUploadInput" accept="image/*" class="hidden" />
+
+          <!-- Polaroid Caption dynamically synced with name -->
+          <div class="text-center mt-3">
+            <p id="polaroidCaption" class="font-pacifico text-2xl text-candyPink leading-tight">
+              my besdong
+            </p>
+            <p class="text-xs font-fredoka text-softViolet font-medium">✨ The Brightest Birthday Star ✨</p>
+          </div>
+        </div>
+
+        <!-- Action Buttons for Photo -->
+        <div class="flex gap-2 mt-4">
+          <label for="photoUploadInput"
+            class="cursor-pointer bg-gradient-to-r from-candyPink to-candyRose text-white font-fredoka text-xs font-semibold px-4 py-2 rounded-full shadow-md hover:opacity-95 active:scale-95 transition-all flex items-center gap-1.5">
+            <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+            <span>Upload Photo</span>
+          </label>
+          <button id="resetPhotoBtn"
+            class="bg-white hover:bg-gray-100 border border-gray-200 text-gray-600 font-fredoka text-xs font-semibold px-3 py-2 rounded-full transition active:scale-95">
+            Reset Photo
+          </button>
+        </div>
+      </div>
+
+      <!-- RETRO CASSETTE MUSIC BOX (WEB AUDIO API SYNTH) -->
+      <div
+        class="bg-gradient-to-b from-pastelPink/40 via-pastelLilac/30 to-pink-50/50 rounded-2xl border-2 border-pink-200 p-5 shadow-inner flex flex-col justify-between">
+
+        <div class="text-center mb-3">
+          <!-- <div
+            class="inline-flex items-center gap-1 text-[11px] font-fredoka font-bold bg-pastelLilac text-purple-700 px-3 py-0.5 rounded-full mb-1">
+            <span>📻</span> 100% Web Audio Synthesizer
+          </div> -->
+          <h3 class="font-fredoka text-xl sm:text-2xl font-bold text-gray-800">
+            Pastel Music Box
+          </h3>
+          <p class="text-xs text-gray-500">Play the sweet celesta chime version of "Happy Birthday"!</p>
+        </div>
+
+        <!-- Cassette Player Graphic -->
+        <div class="bg-pastelPink/90 border-3 border-pink-300 rounded-2xl p-4 shadow-md relative">
+          <!-- Screw Top Details -->
+          <div class="flex justify-between items-center mb-2 px-1">
+            <span class="w-2.5 h-2.5 rounded-full bg-pink-300 border border-pink-400 inline-block"></span>
+            <span id="cassetteTrackTitle"
+              class="text-[10px] font-fredoka font-bold tracking-widest text-candyRose uppercase bg-white/80 px-2.5 py-0.5 rounded-full truncate max-w-[210px]">
+              Side A • Happy Birthday ♫
+            </span>
+            <span class="w-2.5 h-2.5 rounded-full bg-pink-300 border border-pink-400 inline-block"></span>
+          </div>
+
+          <!-- Spool Windows -->
+          <div class="bg-white/95 rounded-xl border border-pink-200 p-3 shadow-inner">
+            <div
+              class="bg-gray-100 rounded-lg border border-gray-200 h-16 flex items-center justify-around relative px-4">
+              <!-- Left Spool Wheel -->
+              <div id="spoolLeft"
+                class="w-10 h-10 rounded-full border-4 border-dashed border-pink-400 bg-white flex items-center justify-center shadow">
+                <div class="w-3 h-3 rounded-full bg-candyRose"></div>
+              </div>
+
+              <!-- Tape Bar Indicator -->
+              <div class="h-2 flex-1 bg-amber-900/20 mx-3 rounded relative overflow-hidden">
+                <div id="cassetteTapeProgress" class="h-full bg-pink-400 w-1/4 transition-all duration-300"></div>
+              </div>
+
+              <!-- Right Spool Wheel -->
+              <div id="spoolRight"
+                class="w-10 h-10 rounded-full border-4 border-dashed border-pink-400 bg-white flex items-center justify-center shadow">
+                <div class="w-3 h-3 rounded-full bg-candyRose"></div>
+              </div>
+            </div>
+
+            <div class="mt-2 flex items-center justify-between text-xs font-fredoka text-gray-500">
+              <span id="cassetteNoteDisplay" class="text-candyRose font-bold">Ready to play ♫</span>
+              <span id="toneModeDisplay" class="text-softViolet">Celesta Mode</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cassette Controls -->
+        <div class="mt-4 flex items-center justify-center gap-2">
+          <button id="cassettePlayBtn"
+            class="flex-1 bg-gradient-to-r from-candyPink to-candyRose hover:opacity-95 text-white font-fredoka py-2.5 px-4 rounded-xl shadow-md active:scale-95 transition-all text-xs sm:text-sm flex items-center justify-center gap-1.5 font-bold cursor-pointer">
+            <i id="cassetteIcon" data-lucide="play" class="w-4 h-4 fill-white"></i>
+            <span id="cassetteLabel">Play Music Box</span>
+          </button>
+
+          <!-- <button id="cassetteLoopBtn"
+            class="bg-white border border-pink-200 text-softViolet hover:bg-pink-50 font-fredoka text-xs px-3.5 py-2.5 rounded-xl shadow-sm active:scale-95 transition font-semibold cursor-pointer">
+            Loop: <span id="loopStatus">ON</span>
+          </button> -->
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- SECTION 2: 3-TIER PASTEL BIRTHDAY CAKE WITH INTERACTIVE CANDLES -->
+    <section
+      class="bg-white/85 backdrop-blur-sm border-2 border-pink-200 rounded-3xl p-6 sm:p-10 shadow-xl shadow-pink-100/60 relative overflow-hidden text-center">
+
+      <div
+        class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-pastelPink text-candyRose font-fredoka text-xs sm:text-sm uppercase tracking-wider mb-2 font-bold shadow-sm">
+        <span>🎂</span> Make A Wish!
+      </div>
+
+      <div class="mb-6">
+        <h2 id="cakeHeader" class="font-fredoka text-2xl sm:text-4xl font-bold text-gray-800">
+          Blow Out The Candles! 🕯️
+        </h2>
+        <p id="cakeSubheader" class="font-nunito text-xs sm:text-base text-gray-500 mt-1 font-semibold">
+          Click the individual flames to puff them out, or click the button below!
+        </p>
+      </div>
+
+      <!-- 3-TIER PASTEL CAKE GRAPHIC -->
+      <div class="relative w-72 sm:w-88 h-72 mx-auto flex flex-col items-center justify-end select-none mt-2">
+
+        <!-- CANDLES ROW -->
+        <div class="flex justify-center items-end space-x-7 sm:space-x-9 mb-[-5px] z-30">
+
+          <!-- Candle 1 (Pastel Blue) -->
+          <div class="flex flex-col items-center cursor-pointer group" onclick="toggleCandle(0, event)"
+            title="Click to blow out!">
+            <div id="flame-0"
+              class="flame w-4 h-7 rounded-full bg-gradient-to-t from-amber-400 via-yellow-200 to-white shadow-[0_0_18px_#ffbb33] animate-flicker">
+            </div>
+            <div class="w-1 h-2 bg-gray-700 rounded-t"></div>
+            <div
+              class="w-4 h-14 bg-gradient-to-b from-sky-200 via-sky-300 to-sky-200 rounded-t-md border border-sky-300 relative overflow-hidden shadow">
+              <div class="w-full h-1 bg-white/70 rotate-45 mt-2"></div>
+              <div class="w-full h-1 bg-white/70 rotate-45 mt-4"></div>
+              <div class="w-full h-1 bg-white/70 rotate-45 mt-6"></div>
+            </div>
+          </div>
+
+          <!-- Candle 2 (Center Pink Taller) -->
+          <div class="flex flex-col items-center cursor-pointer group" onclick="toggleCandle(1, event)"
+            title="Click to blow out!">
+            <div id="flame-1"
+              class="flame w-5 h-9 rounded-full bg-gradient-to-t from-pink-400 via-amber-200 to-white shadow-[0_0_22px_#ff66aa] animate-flicker">
+            </div>
+            <div class="w-1 h-2.5 bg-gray-700 rounded-t"></div>
+            <div
+              class="w-4.5 h-18 bg-gradient-to-b from-pink-200 via-rose-300 to-pink-200 rounded-t-md border border-pink-300 relative overflow-hidden shadow">
+              <div class="w-full h-1.5 bg-white/70 rotate-45 mt-2"></div>
+              <div class="w-full h-1.5 bg-white/70 rotate-45 mt-5"></div>
+              <div class="w-full h-1.5 bg-white/70 rotate-45 mt-8"></div>
+            </div>
+          </div>
+
+          <!-- Candle 3 (Pastel Mint) -->
+          <div class="flex flex-col items-center cursor-pointer group" onclick="toggleCandle(2, event)"
+            title="Click to blow out!">
+            <div id="flame-2"
+              class="flame w-4 h-7 rounded-full bg-gradient-to-t from-amber-400 via-yellow-200 to-white shadow-[0_0_18px_#ffbb33] animate-flicker">
+            </div>
+            <div class="w-1 h-2 bg-gray-700 rounded-t"></div>
+            <div
+              class="w-4 h-14 bg-gradient-to-b from-emerald-200 via-teal-300 to-emerald-200 rounded-t-md border border-teal-300 relative overflow-hidden shadow">
+              <div class="w-full h-1 bg-white/70 rotate-45 mt-2"></div>
+              <div class="w-full h-1 bg-white/70 rotate-45 mt-4"></div>
+              <div class="w-full h-1 bg-white/70 rotate-45 mt-6"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TOP TIER CAKE (Pink Strawberry) -->
+        <div
+          class="w-44 h-16 bg-pastelPink rounded-t-3xl border-2 border-pink-300 relative z-20 shadow-md flex items-center justify-center">
+          <div class="absolute -top-1.5 inset-x-0 flex justify-around">
+            <span class="w-6 h-4 bg-white rounded-full shadow-inner -mt-0.5"></span>
+            <span class="w-7 h-5 bg-white rounded-full shadow-inner -mt-1.5"></span>
+            <span class="w-6 h-4 bg-white rounded-full shadow-inner -mt-0.5"></span>
+            <span class="w-8 h-5 bg-white rounded-full shadow-inner -mt-1.5"></span>
+            <span class="w-6 h-4 bg-white rounded-full shadow-inner -mt-0.5"></span>
+          </div>
+          <div class="text-xl -mt-1 z-10 flex gap-2">
+            <span class="animate-bounce">🍓</span>
+            <span>🍒</span>
+            <span class="animate-bounce" style="animation-delay: 0.2s;">🍓</span>
+          </div>
+        </div>
+
+        <!-- MIDDLE LAYER (Butter Cream Bead) -->
+        <div
+          class="w-52 h-3.5 bg-butterYellow rounded-full -my-1 z-25 shadow-sm border border-yellow-200 flex justify-around items-center px-4">
+          <span class="w-2 h-2 rounded-full bg-pink-300"></span>
+          <span class="w-2 h-2 rounded-full bg-purple-300"></span>
+          <span class="w-2 h-2 rounded-full bg-sky-300"></span>
+          <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+          <span class="w-2 h-2 rounded-full bg-emerald-300"></span>
+          <span class="w-2 h-2 rounded-full bg-pink-300"></span>
+        </div>
+
+        <!-- BOTTOM TIER CAKE (Lilac Cream) -->
+        <div
+          class="w-64 sm:w-76 h-24 bg-pastelLilac rounded-t-3xl border-2 border-purple-200 relative z-10 shadow-lg flex flex-col justify-center items-center">
+          <div class="flex space-x-2 my-1">
+            <span class="w-3.5 h-3.5 bg-pastelYellow rounded-full inline-block shadow-inner"></span>
+            <span class="w-3.5 h-3.5 bg-pastelMint rounded-full inline-block shadow-inner"></span>
+            <span class="w-3.5 h-3.5 bg-pastelPink rounded-full inline-block shadow-inner"></span>
+            <span class="w-3.5 h-3.5 bg-pastelPeach rounded-full inline-block shadow-inner"></span>
+            <span class="w-3.5 h-3.5 bg-pastelYellow rounded-full inline-block shadow-inner"></span>
+            <span class="w-3.5 h-3.5 bg-pastelMint rounded-full inline-block shadow-inner"></span>
+          </div>
+          <div class="font-fredoka text-sm sm:text-base text-candyRose font-bold tracking-widest mt-0.5 uppercase">
+            ★<span class="sync-name">my besdong</span> ★
+          </div>
+        </div>
+
+        <!-- CAKE PEDESTAL / STAND -->
+        <div
+          class="w-76 sm:w-88 h-5 bg-white border-2 border-gray-200 rounded-full shadow-md z-10 -mt-1 flex items-center justify-center">
+          <div class="w-56 h-1 bg-pink-200 rounded-full"></div>
+        </div>
+        <div
+          class="w-28 h-4 bg-gradient-to-b from-gray-100 to-gray-200 rounded-b-xl border-x-2 border-b-2 border-gray-200 shadow-md z-0">
+        </div>
+
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <button id="blowCandlesBtn"
+          class="flex items-center gap-2 bg-gradient-to-r from-candyPink to-candyRose hover:opacity-95 text-white font-fredoka px-6 sm:px-8 py-3 rounded-2xl shadow-lg shadow-pink-300/50 active:scale-95 transition-all text-sm sm:text-base font-bold">
+          <i data-lucide="wind" class="w-5 h-5"></i>
+          <span>Blow Out Candles!</span>
+        </button>
+
+        <button id="relightCandlesBtn"
+          class="flex items-center gap-2 bg-pastelYellow hover:bg-yellow-200 text-amber-900 border border-amber-300 font-fredoka px-5 sm:px-6 py-3 rounded-2xl active:scale-95 transition-all text-sm sm:text-base font-semibold">
+          <i data-lucide="sparkles" class="w-4 h-4 text-amber-600"></i>
+          <span>Relight Candles</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- SECTION 3: 3D ENVELOPE / FLIP OPEN GREETING LETTER -->
+    <section
+      class="bg-gradient-to-b from-white/90 to-purple-50/70 border-2 border-purple-200 rounded-3xl p-6 sm:p-10 shadow-xl shadow-purple-100/50">
+
+      <div class="text-center max-w-lg mx-auto mb-6">
+        <div
+          class="w-12 h-12 rounded-full bg-pastelLilac flex items-center justify-center mx-auto mb-2 text-2xl shadow-inner animate-bounce">
+          💌
+        </div>
+        <h2 class="font-fredoka text-2xl sm:text-3xl font-bold text-gray-800">
+          A Sealed Birthday Keepsake Card
+        </h2>
+        <p class="text-xs sm:text-sm text-gray-500 mt-1">
+          Tap the heart wax seal to open the letter and reveal your birthday blessing!
+        </p>
+      </div>
+
+      <!-- ENVELOPE CONTAINER -->
+      <div class="envelope-card max-w-md mx-auto relative pt-4 pb-4 px-2">
+        <div id="envelopeWrapper"
+          class="envelope-closed envelope-wrapper relative w-full max-w-sm mx-auto bg-pastelPink rounded-3xl border-4 border-pink-300 shadow-2xl transition-all duration-500 overflow-hidden">
+
+          <!-- SEALED FRONT FACE (Shown when envelope is closed) -->
+          <div
+            class="envelope-sealed-view flex flex-col items-center justify-center p-6 sm:p-8 text-center select-none min-h-[320px] relative bg-gradient-to-b from-pink-100/90 to-pastelPink">
+            <!-- Decorative Postage Stamp -->
+            <div
+              class="absolute top-4 right-4 bg-white/95 border-2 border-dashed border-pink-300 rounded-lg p-1.5 shadow-sm rotate-6">
+              <div
+                class="w-9 h-11 bg-pink-50 rounded flex flex-col items-center justify-center text-[10px] font-fredoka font-bold text-candyRose">
+                <span>🎂</span>
+                <span>VIP</span>
+              </div>
+            </div>
+
+            <!-- Envelope Heading -->
+            <div class="mb-5 space-y-1">
+              <span
+                class="inline-block px-3 py-0.5 rounded-full bg-white/90 text-[11px] font-fredoka font-bold text-softViolet border border-pink-200 shadow-sm">
+                ★ Confidential Birthday Keepsake ★
+              </span>
+              <h3 class="font-pacifico text-2xl sm:text-3xl text-candyPink pt-1">
+                For <span class="sync-name">my besdong</span> 🌸
+              </h3>
+            </div>
+
+            <!-- Glowing Heart Wax Seal Button -->
+            <div class="my-2">
+              <button id="sealBtn" aria-label="Open Birthday Letter"
+                class="w-20 h-20 rounded-full bg-gradient-to-tr from-rose-500 via-pink-500 to-candyRose border-4 border-white text-white font-fredoka flex flex-col items-center justify-center shadow-xl shadow-pink-400/40 transform hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer animate-pulse">
+                <span class="text-3xl">💖</span>
+                <span class="text-[9px] font-bold uppercase tracking-wider mt-0.5">OPEN</span>
+              </button>
+            </div>
+
+            <p class="text-xs font-fredoka text-gray-500 font-semibold mt-4">
+              Tap the heart wax seal to break the seal & read! 💌
+            </p>
+          </div>
+
+          <!-- UNSEALED LETTER SHEET (Reveals only after tapping heart seal) -->
+          <div id="letterSheet"
+            class="letter-sheet mx-3 my-3 bg-white rounded-2xl p-5 sm:p-7 shadow-md border border-pink-100 z-10">
+            <div class="flex items-center justify-between border-b border-pink-100 pb-2 mb-3">
+              <span class="font-fredoka text-xs text-softViolet uppercase font-bold tracking-wider">★ Birthday
+                Card</span>
+              <button id="resealBtn"
+                class="flex items-center gap-1 text-[11px] font-fredoka text-candyRose hover:text-purple-600 font-bold bg-pink-50 hover:bg-pink-100 px-3 py-1 rounded-full border border-pink-200 transition active:scale-95 cursor-pointer">
+                <span>Reseal Card</span>
+                <span>🔒</span>
+              </button>
+            </div>
+
+            <h3 class="font-fredoka text-xl sm:text-2xl text-candyPink font-bold mb-2">
+              Dearest <span class="sync-name text-candyPurple">my besdong</span>,
+            </h3>
+
+            <p class="font-nunito text-xs sm:text-sm text-gray-600 leading-relaxed space-y-2">
+              Today is all about YOU! May your special day be filled with warm cuddly hugs, endless laughter, delicious
+              sweet cake slices, and every dream you've ever wished upon a star coming true! 🌈✨
+              <br><br>
+              Thank you for being such a radiant light in our lives. Keep shining bright and staying magical! 🧁
+            </p>
+
+            <div class="mt-4 pt-3 border-t border-pink-100 flex items-center justify-between">
+              <div class="flex items-center space-x-1.5 text-2xl">
+                <span>🧸</span><span>🍰</span><span>🦄</span>
+              </div>
+              <div class="text-right">
+                <p class="font-fredoka text-xs text-candyRose font-semibold">With infinite love,</p>
+                <p class="font-pacifico text-xs sm:text-sm text-softViolet">Everyone Who Loves You 💕</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-16 text-center text-xs text-softViolet/80 font-fredoka space-y-1">
+    <p>Crafted with endless sprinkles, fluffy vanilla cream & music-box harmonies 🎀</p>
+    <p class="text-[11px] text-gray-400">Happy Birthday to you, today and every day!</p>
+  </footer>
+
+  <!-- SCRIPT: LOGIC, SYNTHESIS, INTERACTIONS -->
+  <script>
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+
+    /* =========================================================
+       1. CUTE MUSIC BOX: HAPPY BIRTHDAY SYNTHESIZER
+    ========================================================== */
+    let audioCtx = null;
+    let isPlaying = false;
+    let isLooping = true;
+    let scheduledTimeouts = [];
+
+    // Musical frequencies (Key of C)
+    const notes = {
+      C4: 261.63,
+      D4: 293.66,
+      E4: 329.63,
+      F4: 349.23,
+      G4: 392.00,
+      A4: 440.00,
+      Bb4: 466.16,
+      B4: 493.88,
+      C5: 523.25,
+      D5: 587.33
+    };
+
+    // Sheet music: [Note Name, Duration in Beats]
+    const happyBirthdayScore = [
+      ['C4', 0.75], ['C4', 0.25], ['D4', 1.0], ['C4', 1.0], ['F4', 1.0], ['E4', 2.0],
+      ['C4', 0.75], ['C4', 0.25], ['D4', 1.0], ['C4', 1.0], ['G4', 1.0], ['F4', 2.0],
+      ['C4', 0.75], ['C4', 0.25], ['C5', 1.0], ['A4', 1.0], ['F4', 1.0], ['E4', 1.0], ['D4', 2.0],
+      ['Bb4', 0.75], ['Bb4', 0.25], ['A4', 1.0], ['F4', 1.0], ['G4', 1.0], ['F4', 2.0]
+    ];
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Plays a gentle, music-box style bell chime
+    function playChime(frequency, durationSec = 0.8) {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      // 'triangle' gives a gentle, sweet music-box / celesta acoustic
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+      // Soft attack and natural acoustic bell decay
+      const now = audioCtx.currentTime;
+      gainNode.gain.setValueAtTime(0.001, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.2, now + 0.04);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + durationSec * 1.4);
+
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      osc.start(now);
+      osc.stop(now + durationSec * 1.4);
+    }
+
+    // Balloon Pop Sound Effect
+    function playPopSound() {
+      const ctx = getAudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const now = ctx.currentTime;
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(360, now);
+      osc.frequency.exponentialRampToValueAtTime(50, now + 0.07);
+
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.linearRampToValueAtTime(0.001, now + 0.07);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.08);
+    }
+
+    // Candle blow whoosh sound
+    function playBlowSound() {
+      const ctx = getAudioContext();
+      const bufferSize = ctx.sampleRate * 0.35;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+
+      let last = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        data[i] = (last + (0.02 * white)) / 1.02;
+        last = data[i];
+        data[i] *= 3.0;
+      }
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 650;
+      filter.Q.value = 1.2;
+
+      const gain = ctx.createGain();
+      const now = ctx.currentTime;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.3, now + 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+
+      noise.start(now);
+      noise.stop(now + 0.37);
+    }
+
+    // Party Horn fanfare
+    function playFanfare() {
+      const fanfareNotes = [523.25, 659.25, 783.99, 1046.50];
+      fanfareNotes.forEach((f, idx) => {
+        setTimeout(() => {
+          playChime(f, 0.6);
+        }, idx * 90);
+      });
+    }
+
+    /* =========================================================
+       2. RETRO CASSETTE & MUSIC CONTROLLER
+    ========================================================== */
+    const cassettePlayBtn = document.getElementById('cassettePlayBtn');
+    const cassetteLabel = document.getElementById('cassetteLabel');
+    const quickMusicBtn = document.getElementById('quickMusicBtn');
+    const quickMusicText = document.getElementById('quickMusicText');
+    const quickMusicPing = document.getElementById('quickMusicPing');
+    const spoolLeft = document.getElementById('spoolLeft');
+    const spoolRight = document.getElementById('spoolRight');
+    const cassetteTapeProgress = document.getElementById('cassetteTapeProgress');
+    const cassetteNoteDisplay = document.getElementById('cassetteNoteDisplay');
+    const cassetteLoopBtn = document.getElementById('cassetteLoopBtn');
+    const loopStatus = document.getElementById('loopStatus');
+
+    function updateMusicUI(active) {
+      if (active) {
+        if (cassetteLabel) cassetteLabel.textContent = 'Pause Music Box';
+        if (quickMusicText) quickMusicText.textContent = 'Pause Song';
+        if (quickMusicPing) quickMusicPing.classList.remove('hidden');
+        if (spoolLeft) spoolLeft.classList.add('animate-cassette-spin');
+        if (spoolRight) spoolRight.classList.add('animate-cassette-spin');
+      } else {
+        if (cassetteLabel) cassetteLabel.textContent = 'Play Music Box';
+        if (quickMusicText) quickMusicText.textContent = 'Play Song';
+        if (quickMusicPing) quickMusicPing.classList.add('hidden');
+        if (spoolLeft) spoolLeft.classList.remove('animate-cassette-spin');
+        if (spoolRight) spoolRight.classList.remove('animate-cassette-spin');
+        if (cassetteNoteDisplay) cassetteNoteDisplay.textContent = 'Paused ♫';
+      }
+    }
+
+    // Start / Pause toggle function
+    function toggleSong() {
+      // Browsers require user interaction before starting AudioContext
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      if (isPlaying) {
+        // Stop all scheduled notes
+        scheduledTimeouts.forEach(clearTimeout);
+        scheduledTimeouts = [];
+        isPlaying = false;
+        console.log("Music paused");
+        updateMusicUI(false);
+        return;
+      }
+
+      isPlaying = true;
+      console.log("Playing Happy Birthday...");
+      updateMusicUI(true);
+
+      const tempo = 450; // Milliseconds per beat (lower = faster, higher = slower)
+      let accumulatedDelay = 0;
+
+      happyBirthdayScore.forEach(([note, beats], noteIdx) => {
+        const duration = (beats * tempo) / 1000;
+
+        const timeoutId = setTimeout(() => {
+          if (isPlaying && notes[note]) {
+            playChime(notes[note], duration);
+            if (cassetteNoteDisplay) {
+              cassetteNoteDisplay.textContent = `Chiming: ${note} ♫`;
+            }
+            if (cassetteTapeProgress) {
+              const pct = Math.round(((noteIdx + 1) / happyBirthdayScore.length) * 100);
+              cassetteTapeProgress.style.width = `${pct}%`;
+            }
+            spawnCassetteNote();
+          }
+        }, accumulatedDelay);
+
+        scheduledTimeouts.push(timeoutId);
+        accumulatedDelay += beats * tempo;
+      });
+
+      // Loop the song smoothly after it finishes
+      const loopTimeout = setTimeout(() => {
+        if (isPlaying) {
+          if (isLooping) {
+            isPlaying = false;
+            toggleSong();
+          } else {
+            scheduledTimeouts.forEach(clearTimeout);
+            scheduledTimeouts = [];
+            isPlaying = false;
+            updateMusicUI(false);
+          }
+        }
+      }, accumulatedDelay + 1200);
+
+      scheduledTimeouts.push(loopTimeout);
+    }
+
+    if (cassettePlayBtn) cassettePlayBtn.addEventListener('click', toggleSong);
+    if (quickMusicBtn) quickMusicBtn.addEventListener('click', toggleSong);
+
+    if (cassetteLoopBtn) {
+      cassetteLoopBtn.addEventListener('click', () => {
+        isLooping = !isLooping;
+        if (loopStatus) loopStatus.textContent = isLooping ? 'ON' : 'OFF';
+        playChime(659.25, 0.4);
+      });
+    }
+
+    function spawnCassetteNote() {
+      const anchor = cassettePlayBtn || document.body;
+      const rect = anchor.getBoundingClientRect();
+      const el = document.createElement('div');
+      const symbols = ['♫', '♪', '♬', '✨', '💖'];
+      el.className = 'music-note-float font-fredoka text-candyRose font-bold text-base';
+      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+      const randomX = (Math.random() - 0.5) * 60;
+      el.style.setProperty('--tw-note-x', `${randomX}px`);
+      el.style.left = `${rect.left + rect.width / 2}px`;
+      el.style.top = `${rect.top}px`;
+
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2000);
+    }
+
+    /* =========================================================
+       3. PHOTO UPLOAD (FILEREADER + LOCALSTORAGE)
+    ========================================================== */
+    const photoUploadInput = document.getElementById('photoUploadInput');
+    const birthdayPhoto = document.getElementById('birthdayPhoto');
+    const resetPhotoBtn = document.getElementById('resetPhotoBtn');
+    const DEFAULT_PHOTO = '';
+
+    // Load persisted photo and name if exists
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedPhoto = localStorage.getItem('cute_birthday_photo');
+      if (savedPhoto) {
+        birthdayPhoto.src = savedPhoto;
+      }
+
+      // Check URL param first (e.g. ?name=Rachana), fallback to localStorage or default
+      const urlParams = new URLSearchParams(window.location.search);
+      const nameParam = urlParams.get('name');
+      if (nameParam && nameParam.trim()) {
+        syncName(nameParam.trim());
+      } else {
+        const savedName = localStorage.getItem('cute_birthday_name');
+        if (savedName && savedName !== 'Sweet' && savedName !== 'Sweet Angel') {
+          syncName(savedName);
+        } else {
+          syncName('my besdong');
+        }
+      }
+    });
+
+    photoUploadInput.addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          birthdayPhoto.src = event.target.result;
+          try {
+            localStorage.setItem('cute_birthday_photo', event.target.result);
+          } catch (err) {
+            console.warn('Image storage limit reached in localStorage:', err);
+          }
+          triggerConfetti(0.5, 0.4);
+          playFanfare();
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    resetPhotoBtn.addEventListener('click', () => {
+      birthdayPhoto.src = DEFAULT_PHOTO;
+      localStorage.removeItem('cute_birthday_photo');
+      playChime(440, 0.4);
+    });
+
+    /* =========================================================
+       4. NAME SYNCING (HERO, POLAROID & CARD)
+    ========================================================== */
+    const nameInput = document.getElementById('nameInput');
+    const heroRecipientName = document.getElementById('heroRecipientName');
+    const polaroidCaption = document.getElementById('polaroidCaption');
+    const syncNameElements = document.querySelectorAll('.sync-name');
+    const saveNameBtn = document.getElementById('saveNameBtn');
+
+    function syncName(name) {
+      const clean = name.trim() || 'my besdong';
+      if (heroRecipientName) heroRecipientName.textContent = clean;
+      if (polaroidCaption) polaroidCaption.textContent = clean;
+      syncNameElements.forEach(el => el.textContent = clean);
+      try {
+        localStorage.setItem('cute_birthday_name', clean);
+      } catch (e) { }
+    }
+
+    if (nameInput) {
+      nameInput.addEventListener('input', (e) => {
+        syncName(e.target.value);
+      });
+    }
+
+    if (saveNameBtn) {
+      saveNameBtn.addEventListener('click', () => {
+        if (nameInput) syncName(nameInput.value);
+        triggerConfetti(0.5, 0.3);
+        playFanfare();
+      });
+    }
+
+    /* =========================================================
+       5. 3-TIER CAKE & CANDLE BLOWING INTERACTIONS
+    ========================================================== */
+    const candleStates = [true, true, true];
+    let cakeCelebrated = false;
+
+    function toggleCandle(idx, event) {
+      candleStates[idx] = !candleStates[idx];
+      renderCandles();
+
+      if (!candleStates[idx]) {
+        playBlowSound();
+        const clientX = event ? event.clientX : window.innerWidth / 2;
+        const clientY = event ? event.clientY : window.innerHeight / 2;
+        spawnSmokePuff(clientX, clientY);
+      } else {
+        playChime(659.25, 0.4);
+      }
+
+      checkCandlesStatus();
+    }
+
+    function renderCandles() {
+      candleStates.forEach((isLit, idx) => {
+        const flame = document.getElementById(`flame-${idx}`);
+        if (flame) {
+          if (isLit) flame.classList.remove('blown-out');
+          else flame.classList.add('blown-out');
+        }
+      });
+    }
+
+    function spawnSmokePuff(x, y) {
+      for (let i = 0; i < 3; i++) {
+        const puff = document.createElement('div');
+        puff.className = 'smoke-puff';
+        puff.style.left = `${x + (Math.random() * 12 - 6)}px`;
+        puff.style.top = `${y}px`;
+        puff.style.animationDelay = `${i * 0.1}s`;
+        document.body.appendChild(puff);
+        setTimeout(() => puff.remove(), 1300);
+      }
+    }
+
+    function blowAllCandles() {
+      playBlowSound();
+      candleStates.forEach((_, idx) => {
+        candleStates[idx] = false;
+        const flame = document.getElementById(`flame-${idx}`);
+        if (flame) {
+          const rect = flame.getBoundingClientRect();
+          spawnSmokePuff(rect.left + rect.width / 2, rect.top);
+        }
+      });
+      renderCandles();
+      checkCandlesStatus();
+    }
+
+    function relightCandles() {
+      playChime(523.25, 0.5);
+      candleStates.forEach((_, idx) => candleStates[idx] = true);
+      cakeCelebrated = false;
+      renderCandles();
+
+      document.getElementById('cakeHeader').textContent = 'Blow Out The Candles! 🕯️';
+      document.getElementById('cakeSubheader').textContent = 'Click the individual flames to puff them out, or click the button below!';
+    }
+
+    function checkCandlesStatus() {
+      const anyLit = candleStates.some(state => state === true);
+      if (!anyLit && !cakeCelebrated) {
+        cakeCelebrated = true;
+        document.getElementById('cakeHeader').innerHTML = '🎉 WISH GRANTED! HAPPY BIRTHDAY! 🎉';
+        document.getElementById('cakeSubheader').textContent = 'May all your sweetest wishes bloom into reality!';
+
+        playFanfare();
+        triggerMassiveConfetti();
+
+        if (!isPlaying) {
+          setTimeout(toggleSong, 400);
+        }
+      }
+    }
+
+    document.getElementById('blowCandlesBtn').addEventListener('click', blowAllCandles);
+    document.getElementById('relightCandlesBtn').addEventListener('click', relightCandles);
+
+    /* =========================================================
+       6. 3D ENVELOPE / GREETING CARD FLIP
+    ========================================================== */
+    const envelopeWrapper = document.getElementById('envelopeWrapper');
+    const sealBtn = document.getElementById('sealBtn');
+    const resealBtn = document.getElementById('resealBtn');
+    let isEnvelopeOpen = false;
+
+    function openEnvelope() {
+      if (isEnvelopeOpen) return;
+      isEnvelopeOpen = true;
+      envelopeWrapper.classList.remove('envelope-closed');
+      envelopeWrapper.classList.add('envelope-open');
+      playFanfare();
+      triggerConfetti(0.5, 0.4);
+    }
+
+    function closeEnvelope() {
+      if (!isEnvelopeOpen) return;
+      isEnvelopeOpen = false;
+      envelopeWrapper.classList.remove('envelope-open');
+      envelopeWrapper.classList.add('envelope-closed');
+      playPopSound();
+    }
+
+    if (sealBtn) {
+      sealBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openEnvelope();
+      });
+    }
+
+    if (resealBtn) {
+      resealBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeEnvelope();
+      });
+    }
+
+
+
+    /* =========================================================
+       8. CONFETTI CANNON SYSTEMS
+    ========================================================== */
+    const pastelPalette = ['#FFD6E0', '#FF6B8B', '#E8DFF5', '#9B5DE5', '#C9E4DE', '#FCF5C7', '#FFE4D6'];
+
+    function triggerConfetti(x = 0.5, y = 0.5) {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 50,
+          spread: 70,
+          origin: { x, y },
+          colors: pastelPalette,
+          disableForReducedMotion: true
+        });
+      }
+    }
+
+    function triggerMiniConfetti(clientX, clientY) {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 20,
+          spread: 45,
+          startVelocity: 25,
+          origin: {
+            x: clientX / window.innerWidth,
+            y: clientY / window.innerHeight
+          },
+          colors: pastelPalette
+        });
+      }
+    }
+
+    function triggerMassiveConfetti() {
+      if (typeof confetti !== 'function') return;
+
+      const duration = 2.5 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 4,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0, y: 0.7 },
+          colors: pastelPalette
+        });
+        confetti({
+          particleCount: 4,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1, y: 0.7 },
+          colors: pastelPalette
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    }
+
+    document.getElementById('topConfettiBtn').addEventListener('click', () => {
+      playFanfare();
+      triggerMassiveConfetti();
+    });
+
+    /* =========================================================
+       9. AMBIENT BACKGROUND FLOATERS & SPARKLE CURSOR
+    ========================================================== */
+    function initAmbientFloaters() {
+      const container = document.getElementById('ambient-bg');
+      const symbols = ['✦', '✧', '🌸', '✨', '☁️', '🎈', '🍰', '💖'];
+
+      for (let i = 0; i < 22; i++) {
+        const item = document.createElement('span');
+        item.className = 'floating-bg-item select-none';
+        item.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        item.style.left = `${Math.random() * 100}vw`;
+        item.style.fontSize = `${Math.random() * 16 + 14}px`;
+        item.style.color = pastelPalette[Math.floor(Math.random() * pastelPalette.length)];
+        item.style.animationDuration = `${Math.random() * 12 + 10}s`;
+        item.style.animationDelay = `${Math.random() * 8}s`;
+        container.appendChild(item);
+      }
+    }
+
+    let lastSparkleTime = 0;
+    function createCursorSparkle(x, y) {
+      const now = Date.now();
+      if (now - lastSparkleTime < 65) return;
+      lastSparkleTime = now;
+
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle-trail';
+      const sparkles = ['✨', '🌸', '✦', '💖'];
+      sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+      sparkle.style.left = `${x}px`;
+      sparkle.style.top = `${y}px`;
+      document.body.appendChild(sparkle);
+
+      setTimeout(() => sparkle.remove(), 750);
+    }
+
+    window.addEventListener('mousemove', (e) => createCursorSparkle(e.clientX, e.clientY));
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches[0]) {
+        createCursorSparkle(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+
+    window.addEventListener('load', initAmbientFloaters);
+  </script>
+</body>
+
+</html>
