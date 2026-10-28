@@ -135,3 +135,17 @@
   z-index: 0;
   animation: driftUp linear infinite;
 }
+
+/* Shimmer effect for loader progress bar */
+@keyframes shimmerBar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-shimmer-bar {
+  animation: shimmerBar 1.8s ease-in-out infinite;
+}

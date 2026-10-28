@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <!-- Drop shadow for scrapbook collage pieces -->
+    <filter id="scrapShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="1.5" dy="2.5" stdDeviation="1.5" flood-color="#2D1B28" flood-opacity="0.35" />
+    </filter>
+    <filter id="letterShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="1" dy="1.5" stdDeviation="0.8" flood-color="#1A1A24" flood-opacity="0.4" />
+    </filter>
+    
+    <!-- Checkerboard pattern for "B" background -->
+    <pattern id="ginghamCheck" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-6)">
+      <rect width="8" height="8" fill="#F7CAD0" />
+      <rect width="4" height="4" fill="#98C1D9" />
+      <rect x="4" y="4" width="4" height="4" fill="#98C1D9" />
+      <rect x="0" y="4" width="4" height="4" fill="#BBD0E5" opacity="0.6" />
+      <rect x="4" y="0" width="4" height="4" fill="#BBD0E5" opacity="0.6" />
+    </pattern>
+
+    <!-- Polka dot pattern for "D" -->
+    <pattern id="pinkPolka" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="#F48FB1" />
+      <circle cx="3" cy="3" r="1.4" fill="#FFFFFF" opacity="0.55" />
+      <circle cx="0" cy="0" r="1" fill="#FFFFFF" opacity="0.55" />
+      <circle cx="6" cy="0" r="1" fill="#FFFFFF" opacity="0.55" />
+      <circle cx="0" cy="6" r="1" fill="#FFFFFF" opacity="0.55" />
+      <circle cx="6" cy="6" r="1" fill="#FFFFFF" opacity="0.55" />
+    </pattern>
+
+    <!-- Gradients -->
+    <linearGradient id="yellowB" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFDD53" />
+      <stop offset="100%" stop-color="#F5B700" />
+    </linearGradient>
+
+    <linearGradient id="denimBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5B7BA8" />
+      <stop offset="100%" stop-color="#3D5A80" />
+    </linearGradient>
+
+    <linearGradient id="pinkY" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFB5C5" />
+      <stop offset="100%" stop-color="#F06292" />
+    </linearGradient>
+  </defs>
+
+  <!-- GROUP: ALL "B'DAY" LETTERS (Centered in 100x100) -->
+  <g transform="translate(4, 5)">
+    <!-- 1. TORN CHECKERED SCRAP FOR 'B' -->
+    <g filter="url(#scrapShadow)">
+      <!-- Deckled / torn paper edge polygon -->
+      <polygon points="
+        7,35 12,33 18,34 24,33 30,35 34,34 
+        35,40 33,48 35,56 34,64 36,70 33,76
+        28,78 22,76 16,77 10,75 5,77 
+        7,70 5,62 7,54 5,46 7,40"
+        fill="url(#ginghamCheck)" stroke="#F8BBD0" stroke-width="0.75" />
+      <!-- Torn paper white edge overlay -->
+      <polyline points="7,35 12,33 18,34 24,33 30,35 34,34" fill="none" stroke="#FFFFFF" stroke-width="0.8" opacity="0.7" />
+      <polyline points="28,78 22,76 16,77 10,75 5,77" fill="none" stroke="#FFFFFF" stroke-width="0.8" opacity="0.7" />
+    </g>
+
+    <!-- 'B' LETTER -->
+    <g filter="url(#letterShadow)">
+      <!-- Letter B drop shadow border -->
+      <path d="M12,41 L21,41 C24.5,41 27,42.5 27,45.5 C27,47.2 25.8,48.5 24.2,49 C26.5,49.5 28,51.2 28,53.8 C28,57.5 25,59.5 21,59.5 L12,59.5 Z"
+        fill="#1E1E24" transform="translate(1.5, 2)" opacity="0.3" />
+      <!-- Letter B main body -->
+      <path d="M12,41 L21,41 C24.5,41 27,42.5 27,45.5 C27,47.2 25.8,48.5 24.2,49 C26.5,49.5 28,51.2 28,53.8 C28,57.5 25,59.5 21,59.5 L12,59.5 Z"
+        fill="url(#yellowB)" stroke="#222222" stroke-width="2.6" stroke-linejoin="round" />
+      <!-- B Holes -->
+      <path d="M16.5,45 L19.8,45 C21.2,45 22.2,45.6 22.2,46.8 C22.2,48 21.2,48.6 19.8,48.6 L16.5,48.6 Z"
+        fill="#222222" />
+      <path d="M16.5,51.8 L20.2,51.8 C21.8,51.8 23,52.5 23,54 C23,55.5 21.8,56.2 20.2,56.2 L16.5,56.2 Z"
+        fill="#222222" />
+    </g>
+
+    <!-- 2. LETTER 'D' (Polka dot pink with stitched edge) -->
+    <g filter="url(#scrapShadow)">
+      <!-- D Drop Shadow -->
+      <path d="M33,38 L42,38 C49,38 55,42.5 55,51 C55,59.5 49,64 42,64 L33,64 Z"
+        fill="#1E1E24" transform="translate(1.5, 2)" opacity="0.25" />
+      <!-- D Body -->
+      <path d="M33,38 L42,38 C49,38 55,42.5 55,51 C55,59.5 49,64 42,64 L33,64 Z"
+        fill="url(#pinkPolka)" stroke="#C2185B" stroke-width="2.4" stroke-linejoin="round" />
+      <!-- D Inner Hole -->
+      <path d="M39.5,45 L42.5,45 C45.5,45 48,47.5 48,51 C48,54.5 45.5,57 42.5,57 L39.5,57 Z"
+        fill="#FFFFFF" stroke="#C2185B" stroke-width="2" />
+      <!-- Stitched Dashed Line along edge of D -->
+      <path d="M35,40.5 L41.5,40.5 C47.5,40.5 52.8,44.5 52.8,51 C52.8,57.5 47.5,61.5 41.5,61.5 L35,61.5"
+        fill="none" stroke="#D81B60" stroke-width="1" stroke-dasharray="2,1.5" opacity="0.8" />
+    </g>
+
+    <!-- PARTY HAT ON 'D' -->
+    <g filter="url(#letterShadow)">
+      <!-- Hat Cone -->
+      <polygon points="46,36 49,20 54,34" fill="#E91E63" stroke="#880E4F" stroke-width="1.2" stroke-linejoin="round" />
+      <line x1="49" y1="20" x2="47" y2="36" stroke="#F48FB1" stroke-width="0.8" />
+      <line x1="49" y1="20" x2="52" y2="35" stroke="#F48FB1" stroke-width="0.8" />
+      <!-- Pom-pom base trim -->
+      <circle cx="46.5" cy="36" r="1.5" fill="#FFD54F" stroke="#FFA000" stroke-width="0.5" />
+      <circle cx="49.5" cy="36" r="1.5" fill="#FFD54F" stroke="#FFA000" stroke-width="0.5" />
+      <circle cx="52.5" cy="35" r="1.5" fill="#FFD54F" stroke="#FFA000" stroke-width="0.5" />
+      <!-- Streamers flying from tip -->
+      <path d="M49,20 Q53,16 58,18 Q55,23 60,25" fill="none" stroke="#3F51B5" stroke-width="1.2" stroke-linecap="round" />
+      <path d="M49,20 Q54,19 56,26" fill="none" stroke="#5C6BC0" stroke-width="1" stroke-linecap="round" />
+      <!-- Star/pompom at peak -->
+      <circle cx="49" cy="20" r="1.3" fill="#FFD54F" />
+    </g>
+
+    <!-- 3. APOSTROPHE " ' " (Overlapping B and D) -->
+    <g filter="url(#letterShadow)">
+      <!-- Shadow -->
+      <path d="M29,31 C29,26.5 32.5,23 36.5,23 C38,23 39.5,24 39.5,26 C39.5,32 30.5,39 28,40.5 C29.5,38 33,35 33,31 Z"
+        fill="#1E1E24" transform="translate(1, 1.5)" opacity="0.3" />
+      <!-- Base shape with pink shading -->
+      <path d="M28.5,30 C28.5,25.5 32,22 36,22 C37.8,22 39,23.5 39,25.5 C39,32 30.5,38.5 28,40 C29.5,37 32.5,34 32.5,30 Z"
+        fill="#FF6B8B" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" />
+      <!-- White highlight fill -->
+      <path d="M29.5,29.5 C29.5,26.2 32.2,23.5 35.5,23.5 C36.8,23.5 37.5,24.5 37.5,26 C37.5,30.5 31.5,35 29.5,37 C30.5,35 32.5,33 32.5,29.5 Z"
+        fill="#FFF0F5" />
+    </g>
+
+    <!-- 4. DENIM BLUE SCRAP & LETTER 'A' -->
+    <g filter="url(#scrapShadow)">
+      <!-- Blue Paper Scrap Polygon -->
+      <polygon points="50,42 66,39 68,64 54,67 48,59"
+        fill="url(#denimBlue)" stroke="#2C405E" stroke-width="1.8" stroke-linejoin="round" />
+      <!-- Texture lines on scrap -->
+      <line x1="51" y1="45" x2="65" y2="42" stroke="#7091BE" stroke-width="0.8" opacity="0.6" stroke-dasharray="1.5,1.5" />
+      <line x1="50" y1="63" x2="66" y2="61" stroke="#7091BE" stroke-width="0.8" opacity="0.6" stroke-dasharray="1.5,1.5" />
+      <!-- Letter 'A' (Cream/White cutout) -->
+      <g filter="url(#letterShadow)">
+        <polygon points="58,43 54,58 57.5,58 58.5,54 62.5,54 63.5,58 67,58 63,43"
+          fill="#FAF8F5" stroke="#3D5A80" stroke-width="1.2" stroke-linejoin="round" />
+        <polygon points="60.5,47 59.2,51.5 61.8,51.5" fill="#3D5A80" />
+      </g>
+    </g>
+
+    <!-- 5. LETTER 'Y' (Pink scrapbook paper with stitched outline) -->
+    <g filter="url(#scrapShadow)">
+      <!-- Drop shadow -->
+      <path d="M66,39 L71,39 L75,49 L79,39 L84,39 L78.5,52 L78.5,64 L72.5,64 L72.5,52 Z"
+        fill="#1E1E24" transform="translate(1.5, 2)" opacity="0.25" />
+      <!-- Main 'Y' Body -->
+      <path d="M66,39 L71,39 L75,49 L79,39 L84,39 L78.5,52 L78.5,64 L72.5,64 L72.5,52 Z"
+        fill="url(#pinkY)" stroke="#C2185B" stroke-width="2.2" stroke-linejoin="round" />
+      <!-- Inner dashed highlight / stitch line -->
+      <path d="M68,41 L71,41 L75,50.5 L79,41 L82,41 L76.8,53 L76.8,62 L74.2,62 L74.2,53 Z"
+        fill="none" stroke="#FFFFFF" stroke-width="1" stroke-dasharray="2,1.5" opacity="0.85" />
+    </g>
+  </g>
+</svg>
